@@ -1,4 +1,4 @@
-# Reference implementation of some stuff
+# Reference implementation of some stuff [![CircleCI](https://circleci.com/gh/angrylearners/reference-implementation.svg?style=svg)](https://circleci.com/gh/angrylearners/reference-implementation)
 Check this [link](https://slides.com/fanghr/deck#/) for more details.
 
 ## How to Play
