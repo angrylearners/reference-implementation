@@ -15,7 +15,7 @@ public:
   
   BigInt();
   
-  explicit BigInt(const int);
+  explicit BigInt(int);
   
   explicit BigInt(const char *);
   
@@ -33,9 +33,11 @@ public:
   BigInt &operator%=(const BigInt &);
   
   BigInt &operator++();
+  
   BigInt &operator--();
   
   const BigInt operator++(int);
+  
   const BigInt operator--(int);
   
   BigInt &operator+();
@@ -46,8 +48,9 @@ public:
   
   BigInt operator=(const std::string &);
   
-  friend BigInt pow(const BigInt &, const BigInt &);
-  friend BigInt pow(const BigInt &, const int);
+  friend BigInt Pow(const BigInt &, const BigInt &);
+  
+  friend BigInt Pow(const BigInt &, const int);
   
   friend std::istream &operator>>(std::istream &, BigInt &);
   
@@ -77,15 +80,15 @@ public:
 
 private:
   
-  std::vector<int> vec;
+  std::vector<int> vec_;
   bool sign_;
   
-  void trim();
+  void Trim();
   
-  static BigInt ZERO;
-  static BigInt ONE;
-  static BigInt TWO;
-  static BigInt TEN;
+  static BigInt Zero_;
+  static BigInt One_;
+  static BigInt Two_;
+  static BigInt Ten_;
 };
 
 #endif //BIG_INT_BIG_INT_H
