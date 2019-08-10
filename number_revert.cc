@@ -7,12 +7,12 @@
 #include <cmath>
 #include "big_int/big_int.h"
 
-using std::cout, std::endl, std::cin, std::vector, std::string, std::pow;
+using std::cout, std::endl, std::cin, std::vector, std::string, std::pow, std::stringstream;
 
 auto Revert(const vector<char> &input) -> vector<char> {
   vector<char> res = input;
-  for (size_t i = 0; i < input.size() / 2; i++)
-    std::swap(res[i], res[input.size() - i - 1]);
+  for (auto iter = input.rbegin(); iter != input.rend(); iter++)
+    res.push_back(*iter);
   return res;
 }
 
@@ -28,8 +28,10 @@ auto Calculate(const vector<char> &input) -> BigInt {
 
 auto main() -> int {
   vector<char> input;
+//  string input_str="3246235462367542357423564523654632564236423554623553255723565327423564326463255432574326453254623546532764563254237547236432742354235472342376452375472346236745236546234234236723654623";
   string input_str;
   getline(cin, input_str);
+  
   for (auto ch:input_str)
     input.push_back(ch);
   cout << Calculate(Revert(input)) << endl;
