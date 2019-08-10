@@ -3,10 +3,10 @@
 #include<vector>
 #include<cstring>
 
-BigInt BigInt::Zero_ = BigInt(0);
-BigInt BigInt::One_ = BigInt(1);
-BigInt BigInt::Two_ = BigInt(2);
-BigInt BigInt::Ten_ = BigInt(10);
+BigInt BigInt::zero_ = BigInt(0);
+BigInt BigInt::one_ = BigInt(1);
+BigInt BigInt::two_ = BigInt(2);
+BigInt BigInt::ten_ = BigInt(10);
 
 BigInt::BigInt() {
   vec_.clear();
@@ -59,16 +59,16 @@ BigInt::BigInt(const std::string &i_val) {
   vec_.push_back(i_val[0 + tmp] - '0');
 }
 
-BigInt BigInt::operator=(const BigInt &i_val) {
+BigInt &BigInt::operator=(const BigInt &i_val) {
   vec_.clear();
   sign_ = i_val.sign_;
-  for (std::vector<int>::size_type i = 0; i < i_val.vec_.size(); ++i) {
-    vec_.push_back(i_val.vec_[i]);
+  for (int i : i_val.vec_) {
+    vec_.push_back(i);
   }
   return *this;
 }
 
-BigInt BigInt::operator=(const std::string &i_val) {
+BigInt &BigInt::operator=(const std::string &i_val) {
   vec_.clear();
   sign_ = true;
   int tmp = 0;
@@ -137,7 +137,7 @@ BigInt &BigInt::operator+=(const BigInt &i_val) {
         carry = 0;
     }
   } else {
-    if (sign_ == true && i_val.sign_ == false) {
+    if (sign_ && !i_val.sign_) {
       BigInt tmp(i_val);
       tmp.sign_ = true;
       *this -= tmp;
@@ -184,10 +184,7 @@ BigInt &BigInt::operator-=(const BigInt &i_val) {
 
 BigInt &BigInt::operator*=(const BigInt &i_val) {
   BigInt ret;
-  if (this->sign_ == i_val.sign_)
-    ret.sign_ = true;
-  else
-    ret.sign_ = false;
+  ret.sign_ = this->sign_ == i_val.sign_;
   for (std::vector<int>::size_type i = 0; i < vec_.size(); ++i) {
     for (std::vector<int>::size_type j = 0; j < i_val.vec_.size(); ++j) {
       if (i + j < ret.vec_.size()) {
@@ -214,17 +211,14 @@ BigInt &BigInt::operator*=(const BigInt &i_val) {
 
 BigInt &BigInt::operator/=(const BigInt &i_val) {
   if (*this == i_val) {
-    *this = BigInt::One_;
+    *this = BigInt::one_;
     return *this;
   }
   std::cout << *this << std::endl;
   std::cout << i_val << std::endl;
   
   BigInt ret(0);
-  if (sign_ == i_val.sign_)
-    ret.sign_ = true;
-  else
-    ret.sign_ = false;
+  ret.sign_ = sign_ == i_val.sign_;
   
   BigInt divider(i_val);
   
@@ -232,16 +226,16 @@ BigInt &BigInt::operator/=(const BigInt &i_val) {
   divider.sign_ = true;
   
   if (*this < divider) {
-    *this = BigInt::Zero_;
+    *this = BigInt::zero_;
     return *this;
   }
   
   int cnt = 0;
-  while (*this > BigInt::Zero_) {
+  while (*this > BigInt::zero_) {
     if (*this >= divider) {
       *this -= divider;
-      ret += Pow(BigInt::Ten_, cnt);
-      divider *= BigInt::Ten_;
+      ret += Pow(BigInt::ten_, cnt);
+      divider *= BigInt::ten_;
       cnt++;
     } else {
       divider = i_val;
@@ -266,22 +260,22 @@ BigInt &BigInt::operator%=(const BigInt &i_val) {
 }
 
 BigInt &BigInt::operator++() {
-  *this += BigInt::One_;
+  *this += BigInt::one_;
   return *this;
 }//前置++
 
 BigInt &BigInt::operator--() {
-  *this -= BigInt::One_;
+  *this -= BigInt::one_;
   return *this;
 }
 
-const BigInt BigInt::operator++(int) {
+BigInt BigInt::operator++(int) {
   BigInt temp = *this;
   ++(*this);
   return BigInt(temp);
 }
 
-const BigInt BigInt::operator--(int) {
+BigInt BigInt::operator--(int) {
   BigInt temp = *this;
   --(*this);
   return BigInt(temp);
@@ -305,9 +299,9 @@ bool operator>=(const BigInt &lhs, const BigInt &rhs) {
 }
 
 bool operator<(const BigInt &lhs, const BigInt &rhs) {
-  if (lhs.sign_ == false && rhs.sign_ == true)
+  if (!lhs.sign_ && rhs.sign_)
     return true;
-  if (lhs.sign_ == true && rhs.sign_ == false)
+  if (lhs.sign_ && !rhs.sign_)
     return false;
   if (lhs.sign_) {
     if (lhs.vec_.size() < rhs.vec_.size())
@@ -322,22 +316,13 @@ bool operator<(const BigInt &lhs, const BigInt &rhs) {
   }
   for (std::vector<int>::size_type i = lhs.vec_.size() - 1; i > 0; --i) {
     if (lhs.vec_[i] < rhs.vec_[i]) {
-      if (lhs.sign_)
-        return true;
-      else
-        return false;
+      return lhs.sign_;
     } else if (lhs.vec_[i] > rhs.vec_[i]) {
-      if (lhs.sign_)
-        return false;
-      else
-        return true;
+      return !lhs.sign_;
     }
   }
   if (lhs.vec_[0] < rhs.vec_[0]) {
-    if (lhs.sign_)
-      return true;
-    else
-      return false;
+    return lhs.sign_;
   }
   return false;
 }
@@ -369,10 +354,10 @@ std::istream &operator>>(std::istream &in, BigInt &o_val) {
 }
 
 std::ostream &operator<<(std::ostream &out, const BigInt &i_val) {
-  if (i_val.vec_.size() == 0) {
+  if (i_val.vec_.empty()) {
     out << "0";
   } else {
-    if (i_val.sign_ == false)
+    if (!i_val.sign_)
       out << '-';
     for (std::vector<int>::size_type i = i_val.vec_.size() - 1; i > 0; --i) {
       out << i_val.vec_[i];
@@ -383,18 +368,18 @@ std::ostream &operator<<(std::ostream &out, const BigInt &i_val) {
 }
 
 BigInt Pow(const BigInt &i_val, const BigInt &i_exp) {
-  if (i_exp == BigInt::Zero_ || i_val == BigInt::One_) {
-    return BigInt::One_;
+  if (i_exp == BigInt::zero_ || i_val == BigInt::one_) {
+    return BigInt::one_;
   }
-  if (i_val == BigInt::Zero_) {
-    return BigInt::Zero_;
+  if (i_val == BigInt::zero_) {
+    return BigInt::zero_;
   }
   
   BigInt i(0);
   BigInt ret(i_val);
   BigInt exp(i_exp);
   
-  exp -= BigInt::One_;
+  exp -= BigInt::one_;
   
   while (i < exp) {
     ret *= i_val;

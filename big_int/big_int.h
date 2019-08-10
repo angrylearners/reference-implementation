@@ -36,21 +36,21 @@ public:
   
   BigInt &operator--();
   
-  const BigInt operator++(int);
+  BigInt operator++(int);
   
-  const BigInt operator--(int);
+  BigInt operator--(int);
   
   BigInt &operator+();
   
-  BigInt &operator-();//负号
+  BigInt &operator-();
   
-  BigInt operator=(const BigInt &);
+  BigInt &operator=(const BigInt &);
   
-  BigInt operator=(const std::string &);
+  BigInt &operator=(const std::string &);
   
   friend BigInt Pow(const BigInt &, const BigInt &);
   
-  friend BigInt Pow(const BigInt &, const int);
+  friend BigInt Pow(const BigInt &, int);
   
   friend std::istream &operator>>(std::istream &, BigInt &);
   
@@ -85,10 +85,10 @@ private:
   
   void Trim();
   
-  static BigInt Zero_;
-  static BigInt One_;
-  static BigInt Two_;
-  static BigInt Ten_;
+  static BigInt zero_;
+  static BigInt one_;
+  static BigInt two_;
+  static BigInt ten_;
 };
 
 #endif //BIG_INT_BIG_INT_H
