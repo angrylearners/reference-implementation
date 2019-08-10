@@ -10,3 +10,6 @@ add_executable(dungeon_crawl dungeon_crawl.cc)
 add_executable(random_number random_number.cc)
 add_executable(number_revert number_revert.cc)
 add_executable(guess_number guess_number.cc)
+
+add_library(big_int big_int/big_int.cc big_int/big_int.h)
+target_link_libraries(number_revert big_int)

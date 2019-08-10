@@ -5,6 +5,7 @@
 #include <iostream>
 #include <vector>
 #include <cmath>
+#include "big_int/big_int.h"
 
 using std::cout, std::endl, std::cin, std::vector, std::string, std::pow;
 
@@ -15,15 +16,15 @@ auto Revert(const vector<char> &input) -> vector<char> {
   return res;
 }
 
-auto Calculate(const vector<char> &input) -> uint64_t {
-  uint64_t res = 0;
+auto Calculate(const vector<char> &input) -> BigInt {
+  BigInt big_int(0);
   
-  for (size_t i = 0; i < input.size(); i++)
-    res += pow(10, input.size() - 1 - i) * (input[i] - '0');
+  for (size_t i = 0; i < input.size(); i++) {
+    big_int += BigInt(input[i] - '0') * pow(BigInt(10), BigInt(input.size() - 1 - i));
+  }
   
-  return res * 2;
+  return big_int * BigInt(2);
 }
-
 
 auto main() -> int {
   vector<char> input;
