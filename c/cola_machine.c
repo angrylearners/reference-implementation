@@ -39,7 +39,7 @@ int main() {
 
 // Cause scanf() is deprecated in msvc...
 #ifdef _MSC_VER
-  scanf_s("%d", &choice);
+  scanf_s("%zd", &choice);
 #else
   scanf("%zd", &choice);
 #endif
