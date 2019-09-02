@@ -51,9 +51,7 @@ int main() {
   switch (choice) {
 #ifdef USE_GNU_EXTENSIONS
     case 1 ... 5: // GNUC extension. Can be used with MSVC.
-      printf("You chose %s\n", drinks[choice - 1]);
-      printf("Here is your drink.");
-      return EXIT_SUCCESS;
+      ShowUserChoice(drinks[choice - 1]);
 #else
     case 1:
       ShowUserChoice("Coke");
